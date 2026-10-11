@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emerald | Frostbound Wiki</title>
+
+  <link rel="icon" type="image/png" sizes="512x512" href="Brand/Fav.png">
+  <link rel="apple-touch-icon" href="Brand/Fav.png">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0b1422;
+      --surface: #142338;
+      --border: #304963;
+      --text: #edf5ff;
+      --muted: #bacbdd;
+      --accent: #9cddff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .header-space {
+      height: 208px;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 208px;
+      background: linear-gradient(135deg, #173654, #102034);
+      border-bottom: 1px solid var(--border);
+      transition: height 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .header-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px 200px;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      transition: width 0.25s ease, height 0.25s ease,
+                  left 0.25s ease;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+
+    .site-header h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.2;
+      text-align: center;
+      transition: font-size 0.25s ease;
+    }
+
+    .site-header.is-compact {
+      height: 72px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .site-header.is-compact .header-inner {
+      padding: 10px 80px;
+    }
+
+    .site-header.is-compact .header-logo {
+      left: 20px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .site-header.is-compact h1 {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    section {
+      margin-top: 36px;
+      scroll-margin-top: 92px;
+    }
+
+    h2 {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    h3 {
+      margin: 24px 0 12px;
+      color: var(--accent);
+      line-height: 1.4;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    [id] {
+      scroll-margin-top: 92px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .notice {
+      padding: 20px;
+      background: #19334b;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+    }
+
+    .notice p {
+      margin: 8px 0 0;
+    }
+
+    .intro-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      align-items: start;
+      gap: 28px;
+    }
+
+    .intro-text {
+      min-width: 0;
+    }
+
+    .character-info {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .character-info h3 {
+      margin: 0;
+      padding: 14px 16px;
+      background: #19334b;
+      text-align: center;
+    }
+
+    .character-preview {
+      margin: 0;
+      padding: 16px;
+    }
+
+    .character-preview img {
+      width: 100%;
+      height: 280px;
+      object-fit: contain;
+    }
+
+    .character-preview figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .info-fields {
+      margin: 0;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 105px minmax(0, 1fr);
+      gap: 12px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .info-row dt {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .info-row dd {
+      margin: 0;
+    }
+
+    .contents {
+      max-width: 420px;
+      margin-top: 24px;
+      padding: 18px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .contents h3 {
+      margin: 0 0 10px;
+    }
+
+    .contents ol {
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    .contents ol ol {
+      margin-top: 6px;
+    }
+
+    .canon-note {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+    }
+
+    .canon-note h3 {
+      margin: 0 0 10px;
+    }
+
+    .canon-note p:last-child {
+      margin-bottom: 0;
+    }
+
+    .tab-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-button {
+      padding: 8px 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--accent);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .tab-button:hover {
+      background: #19334b;
+    }
+
+    .tab-button[aria-selected="true"] {
+      background: #19334b;
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .tab-panel {
+      padding: 18px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .gallery-item {
+      width: 100%;
+      max-width: 440px;
+      margin: 0;
+      padding: 12px;
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .gallery-item a {
+      display: block;
+      border-radius: 10px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    .gallery-item figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .category-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .category-tag {
+      padding: 4px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 760px) {
+      .intro-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .character-info {
+        width: 100%;
+        max-width: 420px;
+        justify-self: center;
+      }
+
+      .contents {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 20px 16px 20px 156px;
+      }
+
+      .header-logo {
+        left: 16px;
+        width: 128px;
+        height: 128px;
+      }
+
+      .site-header h1 {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+      }
+
+      .site-header.is-compact .header-inner {
+        padding: 10px 16px 10px 76px;
+      }
+
+      .site-header.is-compact .header-logo {
+        left: 16px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .site-header.is-compact h1 {
+        font-size: clamp(1rem, 4.5vw, 1.4rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .header-logo,
+      .site-header h1 {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-space" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a
+        class="header-logo"
+        href="https://cookey12563.github.io/Frostbound-Wiki/main.html"
+        aria-label="Frostbound Wiki home"
+      >
+        <img
+          src="Brand/Logo.png"
+          alt="Frostbound Wiki logo"
+          width="2500"
+          height="2500"
+        >
+      </a>
+      <h1>Frostbound Wiki</h1>
+    </div>
+  </header>
+
+  <main>
+    <aside class="notice" aria-label="Wiki notice">
+      <strong>❄️ Frostbound Wiki Notice</strong>
+      <p>
+        This wiki is currently under construction. More Frostbound
+        information will be added soon, and some things may be subject
+        to change!
+      </p>
+    </aside>
+
+    <section id="overview" aria-labelledby="character-heading">
+      <h2 id="character-heading">Emerald</h2>
+
+      <div class="intro-layout">
+        <div class="intro-text">
+          <p>
+            Emerald is the heart of the group and its unofficial leader
+            in Frostbound. She is a brave, determined orange fox who
+            cares deeply about her friends and keeps moving forward
+            even when she is frightened.
+          </p>
+          <p>
+            She acts on instinct, cares fiercely about those close to
+            her, and is usually the first one on her feet when things
+            go wrong. Her leadership comes from compassion and action
+            rather than an official title.
+          </p>
+
+          <nav class="contents" aria-labelledby="contents-heading">
+            <h3 id="contents-heading">Contents</h3>
+            <ol>
+              <li><a href="#appearance">Appearance</a></li>
+              <li><a href="#personality">Personality</a></li>
+              <li><a href="#story">Story role</a></li>
+              <li><a href="#skills">Skills and strengths</a></li>
+              <li>
+                <a href="#relationships">Relationships</a>
+                <ol>
+                  <li><a href="#azul">Azul</a></li>
+                  <li><a href="#doug">Doug</a></li>
+                  <li><a href="#modern">Modern</a></li>
+                  <li><a href="#friends">Ginger, Frost, Sav, and Jacob</a></li>
+                </ol>
+              </li>
+              <li><a href="#theme">Character theme</a></li>
+              <li><a href="#first-appearance">First appearance</a></li>
+              <li><a href="#other-appearances">Other appearances</a></li>
+              <li><a href="#canon-notes">Canon notes</a></li>
+              <li><a href="#gallery">Gallery</a></li>
+            </ol>
+          </nav>
+        </div>
+
+        <aside class="character-info" aria-labelledby="info-heading">
+          <h3 id="info-heading">Emerald</h3>
+
+          <figure class="character-preview">
+            <img
+              src="Emerald.webp"
+              alt="Emerald in Super Mario Maker 2"
+            >
+            <figcaption>Super Mario Maker 2 version</figcaption>
+          </figure>
+
+          <dl class="info-fields">
+            <div class="info-row">
+              <dt>Name</dt>
+              <dd>Emerald</dd>
+            </div>
+            <div class="info-row">
+              <dt>Series</dt>
+              <dd>Frostbound</dd>
+            </div>
+            <div class="info-row">
+              <dt>Species</dt>
+              <dd>Fox</dd>
+            </div>
+            <div class="info-row">
+              <dt>Pronouns</dt>
+              <dd>She/her</dd>
+            </div>
+            <div class="info-row">
+              <dt>Role</dt>
+              <dd>Unofficial leader of the group</dd>
+            </div>
+            <div class="info-row">
+              <dt>Residence</dt>
+              <dd>Emerald’s Den in the Grasslands</dd>
+            </div>
+            <div class="info-row">
+              <dt>Partner</dt>
+              <dd>Azul (boyfriend)</dd>
+            </div>
+            <div class="info-row">
+              <dt>First appearance</dt>
+              <dd>Episode 1</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section id="appearance">
+      <h2>Appearance</h2>
+      <p>
+        Emerald is an orange fox with orange/ginger fur, expressive
+        ears, paws, and a mountain-tipped tail. She wears a necklace,
+        which is one of her recognizable features.
+      </p>
+      <p>
+        Mars’s artwork depicts Emerald as a non-blocky orange fox,
+        in contrast to her blocky Super Mario Maker 2 representation.
+      </p>
+    </section>
+
+    <section id="personality">
+      <h2>Personality</h2>
+      <p>
+        Emerald is brave, determined, instinctive, and protective.
+        She often takes action before others and naturally becomes
+        someone the group looks toward during difficult situations.
+      </p>
+      <p>
+        Although she can be nervous or easily startled, fear does
+        not stop her from helping others. She also has a playful
+        side and enjoys joking with her friends.
+      </p>
+    </section>
+
+    <section id="story">
+      <h2>Story role</h2>
+      <p>
+        Emerald helps the group face Snow and the dangers of her ice
+        castles. She pushes forward even when the odds are against
+        her, placing her friends’ safety at the center of her actions.
+      </p>
+      <p>
+        After Modern escapes Snow’s control, Emerald stands
+        protectively beside him and respects his right to make his
+        own choices. She helps him feel included and safe rather
+        than trying to decide his future for him.
+      </p>
+    </section>
+
+    <section id="skills">
+      <h2>Skills and strengths</h2>
+      <ul>
+        <li>
+          <strong>Courage:</strong>
+          Emerald acts despite fear, especially when someone needs help.
+        </li>
+        <li>
+          <strong>Initiative:</strong>
+          She is quick to take action when things go wrong.
+        </li>
+        <li>
+          <strong>Emotional support:</strong>
+          She protects and reassures her friends.
+        </li>
+        <li>
+          <strong>Informal leadership:</strong>
+          Her compassion and determination make her someone the group
+          naturally looks toward.
+        </li>
+      </ul>
+      <p>
+        These are personal strengths, not confirmed magical powers.
+      </p>
+    </section>
+
+    <section id="relationships">
+      <h2>Relationships</h2>
+
+      <h3 id="azul">Azul</h3>
+      <p>
+        Azul is a close friend who has a crush on Emerald. His humor
+        makes frightening situations feel less overwhelming, and
+        Emerald appreciates his loyalty.
+      </p>
+      <p>
+        In later pond-garden material, Emerald accepts Azul as her
+        boyfriend. This development is canon.
+      </p>
+
+      <h3 id="doug">Doug</h3>
+      <p>
+        Doug is Emerald’s loyal companion. His doghouse is beside
+        her den in the Grasslands.
+      </p>
+
+      <h3 id="modern">Modern</h3>
+      <p>
+        Modern is a friend Emerald protects and reassures. She
+        helps him feel included and safe after escaping Snow’s
+        control, while respecting his ability to make his own choices.
+      </p>
+
+      <h3 id="friends">Ginger, Frost, Sav, and Jacob</h3>
+      <p>
+        Ginger, Frost, Sav, and Jacob are fellow members of Emerald’s
+        close-knit group. She cares deeply about her friends and is
+        protective of them during dangerous situations.
+      </p>
+    </section>
+
+    <section id="theme">
+      <h2>Character theme</h2>
+      <p>
+        Emerald’s character theme is finding courage. Her bravery
+        does not mean that she is never frightened; it means acting
+        despite fear, especially when someone needs her help.
+      </p>
+    </section>
+
+    <section id="first-appearance">
+      <h2>First appearance</h2>
+      <p>Emerald first appears in Episode 1.</p>
+    </section>
+
+    <section id="other-appearances">
+      <h2>Other appearances</h2>
+      <p>
+        In the work-in-progress crossover
+        <cite>Crossing Paths: Dimensional High</cite>, Emerald and Azul
+        find an unconscious interdimensional stranger named Nova
+        and bring him to Frost for help.
+      </p>
+    </section>
+
+    <section id="canon-notes">
+      <h2>Canon notes</h2>
+
+      <aside class="canon-note" aria-labelledby="relationship-canon-heading">
+        <h3 id="relationship-canon-heading">Relationship continuity</h3>
+        <p>
+          Emerald accepting Azul as her boyfriend in the later
+          pond-garden material is canon.
+        </p>
+        <p>
+          A proposed future dinner story depicts their engagement,
+          but that story is non-canon for now. The proposed engagement
+          is separate from Emerald’s established relationship status
+          and is not treated as a canon event on this page.
+        </p>
+      </aside>
+    </section>
+
+    <section id="gallery">
+      <h2>Gallery</h2>
+
+      <div class="tabs">
+        <div
+          class="tab-buttons"
+          role="tablist"
+          aria-label="Gallery categories"
+        >
+          <button
+            class="tab-button"
+            type="button"
+            id="gallery-tab-artwork"
+            role="tab"
+            aria-selected="true"
+            aria-controls="gallery-artwork"
+          >Artwork</button>
+        </div>
+
+        <div
+          class="tab-panel"
+          id="gallery-artwork"
+          role="tabpanel"
+          aria-labelledby="gallery-tab-artwork"
+          tabindex="0"
+        >
+          <div class="gallery-grid">
+            <figure class="gallery-item">
+              <a
+                href="Artwork/EM-MARS.png"
+                aria-label="View the full Emerald drawing by Mars"
+              >
+                <img
+                  src="Artwork/EM-MARS.png"
+                  alt="Drawing by Mars depicting Emerald as a non-blocky orange fox"
+                  loading="lazy"
+                >
+              </a>
+              <figcaption>
+                Emerald, drawn by Mars. This artwork depicts her as
+                a non-blocky orange fox rather than her blocky
+                Super Mario Maker 2 representation.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="category-tags" aria-label="Character categories">
+      <span class="category-tag">Characters</span>
+      <span class="category-tag">Foxes</span>
+      <span class="category-tag">Frostbound</span>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const header = document.getElementById("site-header");
+      let scheduled = false;
+
+      function updateHeader() {
+        header.classList.toggle("is-compact", window.scrollY > 136);
+        scheduled = false;
+      }
+
+      window.addEventListener("scroll", () => {
+        if (!scheduled) {
+          scheduled = true;
+          window.requestAnimationFrame(updateHeader);
+        }
+      }, { passive: true });
+
+      window.addEventListener("pageshow", updateHeader);
+      updateHeader();
+    })();
+
+    (() => {
+      document.querySelectorAll(".tabs").forEach((group) => {
+        const buttons = [...group.querySelectorAll('[role="tab"]')];
+        const panels = [...group.querySelectorAll('[role="tabpanel"]')];
+
+        function activateTab(button, moveFocus = false) {
+          buttons.forEach((item) => {
+            const selected = item === button;
+            item.setAttribute("aria-selected", String(selected));
+            item.tabIndex = selected ? 0 : -1;
+          });
+
+          panels.forEach((panel) => {
+            panel.hidden =
+              panel.id !== button.getAttribute("aria-controls");
+          });
+
+          if (moveFocus) {
+            button.focus();
+          }
+        }
+
+        buttons.forEach((button, index) => {
+          button.addEventListener("click", () => {
+            activateTab(button);
+          });
+
+          button.addEventListener("keydown", (event) => {
+            let nextIndex;
+
+            if (event.key === "ArrowRight") {
+              nextIndex = (index + 1) % buttons.length;
+            } else if (event.key === "ArrowLeft") {
+              nextIndex =
+                (index - 1 + buttons.length) % buttons.length;
+            } else if (event.key === "Home") {
+              nextIndex = 0;
+            } else if (event.key === "End") {
+              nextIndex = buttons.length - 1;
+            } else {
+              return;
+            }
+
+            event.preventDefault();
+            activateTab(buttons[nextIndex], true);
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
