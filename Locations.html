@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Locations | Frostbound Wiki</title>
 
-  <link rel="icon" type="image/png" sizes="512x512" href="Brand/Fav.png">
-  <link rel="apple-touch-icon" href="Brand/Fav.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../Brand/Fav.png">
+  <link rel="apple-touch-icon" href="../Brand/Fav.png">
 
   <style>
     :root {
@@ -17,6 +17,8 @@
       --text: #edf5ff;
       --muted: #bacbdd;
       --accent: #9cddff;
+      --red: #d9272e;
+      --red-active: #f0494f;
     }
 
     * {
@@ -118,24 +120,15 @@
       line-height: 1.3;
     }
 
-    section {
+    .map-section {
       margin-top: 36px;
       scroll-margin-top: 92px;
     }
 
-    h2 {
+    .section-title {
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
       color: var(--accent);
-    }
-
-    h3 {
-      margin: 0 0 12px;
-      line-height: 1.4;
-    }
-
-    p {
-      margin: 0 0 16px;
     }
 
     a {
@@ -148,7 +141,8 @@
       color: #fff;
     }
 
-    a:focus-visible {
+    a:focus-visible,
+    .map-controls button:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 4px;
     }
@@ -158,6 +152,133 @@
       max-width: 100%;
       height: auto;
       border-radius: 10px;
+    }
+
+    .map-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .map-controls button {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--accent);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .map-controls button:hover {
+      background: #19334b;
+      color: #fff;
+    }
+
+    .info-box {
+      min-height: 110px;
+      margin-bottom: 14px;
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .info-box h3 {
+      margin: 0 0 6px;
+      color: var(--accent);
+      font-size: 1.2rem;
+      line-height: 1.4;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .info-box .creator-note {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+      font-style: italic;
+    }
+
+    .map-shell {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: 0 0 0 1px var(--border);
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .map-shell.dragging {
+      cursor: grabbing;
+    }
+
+    #map {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      user-select: none;
+    }
+
+    #world {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .region-label {
+      fill: #173955;
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      paint-order: stroke;
+      stroke: #edfdfd;
+      stroke-width: 8px;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .small-label {
+      fill: #183b58;
+      font-size: 17px;
+      font-weight: 800;
+      paint-order: stroke;
+      stroke: #effdff;
+      stroke-width: 6px;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .marker {
+      cursor: pointer;
+    }
+
+    .marker:focus-visible {
+      outline: 3px solid #ffd24d;
+      outline-offset: 4px;
+    }
+
+    .marker .pin-shape {
+      fill: var(--red);
+      stroke: #fff;
+      stroke-width: 4;
+      filter: drop-shadow(0 3px 2px rgba(14, 44, 69, 0.42));
+    }
+
+    .marker.active .pin-shape {
+      fill: var(--red-active);
+      stroke: #fff1a2;
     }
 
     @media (max-width: 600px) {
@@ -188,6 +309,10 @@
       .site-header.is-compact h1 {
         font-size: clamp(1rem, 4.5vw, 1.4rem);
       }
+
+      .map-controls {
+        justify-content: flex-start;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -210,7 +335,7 @@
         aria-label="Frostbound Wiki home"
       >
         <img
-          src="Brand/Logo.png"
+          src="../Brand/Logo.png"
           alt="Frostbound Wiki logo"
           width="2500"
           height="2500"
@@ -223,11 +348,513 @@
   <main>
     <h1 class="page-title">Locations</h1>
 
-    <section aria-labelledby="world-map-heading">
-      <h2 id="world-map-heading">World frostbound map</h2>
+    <section class="map-section" aria-labelledby="world-map-heading">
+      <h2 class="section-title" id="world-map-heading">
+        World frostbound map
+      </h2>
 
       <div id="world-map-container">
-        <!-- Interactive map will be added here. -->
+        <div class="map-controls" role="group" aria-label="Map controls">
+          <button type="button" id="zoom-in">＋ Zoom</button>
+          <button type="button" id="zoom-out">－ Zoom</button>
+          <button type="button" id="reset-map">Reset map</button>
+        </div>
+
+        <div class="info-box">
+          <div aria-live="polite" aria-atomic="true">
+            <h3 id="place-name">Choose a story marker</h3>
+            <p id="place-text">
+              Every red pin is connected to lore or a major story-related place.
+            </p>
+          </div>
+
+          <p class="creator-note">
+            A note from me: I gave this my best shot! This isn't a regular
+            uploaded image—the artwork is built directly into the page
+            with SVG code. It was my first time making an image this way
+            in HTML, so please forgive the rough edges. Some parts look
+            a little... questionable XD, but I tried!
+          </p>
+        </div>
+
+        <div class="map-shell" id="map-shell">
+          <svg
+            id="map"
+            viewBox="0 0 1920 1080"
+            preserveAspectRatio="xMidYMid meet"
+            role="group"
+            aria-label="Interactive Frostbound 16 by 9 world map"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#62c1ef"/>
+                <stop offset="100%" stop-color="#2688cb"/>
+              </linearGradient>
+
+              <linearGradient id="grass" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#a7dc68"/>
+                <stop offset="100%" stop-color="#68ad45"/>
+              </linearGradient>
+
+              <linearGradient id="snow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ffffff"/>
+                <stop offset="100%" stop-color="#c7ebf5"/>
+              </linearGradient>
+
+              <linearGradient id="ice" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#edffff"/>
+                <stop offset="48%" stop-color="#8bdff2"/>
+                <stop offset="100%" stop-color="#2b93cc"/>
+              </linearGradient>
+
+              <linearGradient id="swamp" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#638a59"/>
+                <stop offset="100%" stop-color="#315d4b"/>
+              </linearGradient>
+
+              <pattern id="waves" width="54" height="44" patternUnits="userSpaceOnUse">
+                <path
+                  d="M4 24 Q13 15 22 24 T40 24 T58 24"
+                  fill="none" stroke="#d8f7ff"
+                  stroke-width="3" opacity="0.55"
+                />
+                <circle cx="39" cy="7" r="1.5" fill="#e1f9ff" opacity="0.8"/>
+              </pattern>
+
+              <filter id="shadow">
+                <feDropShadow
+                  dx="0" dy="6" stdDeviation="4"
+                  flood-color="#173f5c" flood-opacity="0.27"
+                />
+              </filter>
+
+              <g id="oak-tree">
+                <rect x="-5" y="4" width="10" height="25" rx="2" fill="#7d5135"/>
+                <circle cx="0" cy="-10" r="22" fill="#367c40" stroke="#205a39" stroke-width="4"/>
+                <circle cx="-15" cy="3" r="16" fill="#4d9947"/>
+                <circle cx="14" cy="3" r="16" fill="#4d9947"/>
+                <circle cx="-6" cy="-17" r="13" fill="#64af51"/>
+              </g>
+
+              <g id="snow-pine">
+                <rect x="-5" y="25" width="10" height="25" fill="#745036"/>
+                <path
+                  d="M0 -43 L-32 11 H-17 L-40 35 H40 L17 11 H32 Z"
+                  fill="#28718d" stroke="#195b79" stroke-width="4"
+                />
+                <path
+                  d="M0 -43 L-29 11 H-10 L-35 33 H-7 V-26 H8 V33 H34 L10 11 H29 Z"
+                  fill="#f5ffff" opacity="0.95"
+                />
+              </g>
+
+              <g id="mangrove-tree">
+                <path
+                  d="M0 35 V2 M0 15 L-17 18 M0 15 L17 18"
+                  stroke="#60452f" stroke-width="9" stroke-linecap="round"
+                />
+                <circle cx="-19" cy="-3" r="18" fill="#356c49"/>
+                <circle cx="0" cy="-16" r="24" fill="#407c50"/>
+                <circle cx="21" cy="-3" r="18" fill="#356c49"/>
+              </g>
+
+              <g id="ice-pillar">
+                <path
+                  d="M-19 42 V-24 Q-19-44 0-44 Q19-44 19-24 V42 Z"
+                  fill="url(#ice)" stroke="#1f78ae" stroke-width="4"
+                />
+                <path
+                  d="M-3 -36 V32 M8 -22 V27"
+                  stroke="#efffff" stroke-width="5" opacity="0.76"
+                />
+              </g>
+            </defs>
+
+            <rect width="1920" height="1080" fill="url(#ocean)"/>
+            <rect width="1920" height="1080" fill="url(#waves)" opacity="0.78"/>
+
+            <g id="world">
+              <path
+                d="M110 260
+                   C125 125 320 90 470 152
+                   C600 88 806 107 925 176
+                   C1040 110 1195 128 1300 205
+                   C1450 132 1700 210 1770 372
+                   C1825 500 1775 640 1688 718
+                   C1760 850 1645 978 1460 972
+                   C1340 1045 1135 1026 1020 944
+                   C875 1028 657 1003 567 915
+                   C410 965 220 898 169 760
+                   C57 708 54 565 131 475
+                   C82 401 79 315 110 260 Z"
+                fill="url(#grass)" stroke="#347da1"
+                stroke-width="13" filter="url(#shadow)"
+              />
+
+              <text x="795" y="705" class="region-label">GRASSLANDS</text>
+
+              <path d="M760 742 Q797 690 834 742 Q871 690 908 742" fill="#8bc955" stroke="#559442" stroke-width="5"/>
+              <path d="M1040 828 Q1072 780 1105 828 Q1137 780 1170 828" fill="#8bc955" stroke="#559442" stroke-width="5"/>
+
+              <g transform="translate(750 790)"><use href="#oak-tree"/></g>
+              <g transform="translate(850 820) scale(.85)"><use href="#oak-tree"/></g>
+              <g transform="translate(965 740) scale(.75)"><use href="#oak-tree"/></g>
+              <g transform="translate(1170 805) scale(.9)"><use href="#oak-tree"/></g>
+              <g transform="translate(1260 748) scale(.78)"><use href="#oak-tree"/></g>
+              <g transform="translate(1330 865) scale(.82)"><use href="#oak-tree"/></g>
+              <g transform="translate(1410 770) scale(.9)"><use href="#oak-tree"/></g>
+              <g transform="translate(1480 850) scale(.76)"><use href="#oak-tree"/></g>
+
+              <path d="M670 600 C618 686 651 756 599 833 C565 884 589 950 646 1005" fill="none" stroke="#238fd3" stroke-width="68"/>
+              <path d="M670 600 C618 686 651 756 599 833 C565 884 589 950 646 1005" fill="none" stroke="#b9efff" stroke-width="12"/>
+
+              <g transform="translate(630 794) rotate(-57)">
+                <rect x="-59" y="-18" width="118" height="36" rx="5" fill="#925e36" stroke="#5c3f2c" stroke-width="5"/>
+                <path d="M-44 -14 V14 M-22 -14 V14 M0 -14 V14 M22 -14 V14 M44 -14 V14" stroke="#e1ad69" stroke-width="5"/>
+              </g>
+
+              <text x="518" y="790" class="small-label">Bridge to the grasslands</text>
+
+              <g transform="translate(472 800)" filter="url(#shadow)">
+                <path d="M-50 20 V-28 L0 -68 L50 -28 V20 Z" fill="#f6d08c" stroke="#805a3d" stroke-width="6"/>
+                <path d="M-58 -27 L0 -80 L58 -27" fill="#c55948" stroke="#824039" stroke-width="7"/>
+                <rect x="-10" y="-6" width="20" height="26" fill="#855540"/>
+              </g>
+
+              <g transform="translate(360 850)">
+                <path d="M-29 23 V-7 L0 -30 L29 -7 V23 Z" fill="#dc9c58" stroke="#784d32" stroke-width="6"/>
+                <text x="-17" y="15" font-size="15" font-weight="900" fill="#ffffff">DOUG</text>
+              </g>
+
+              <text x="370" y="912" class="small-label">Emerald's Den</text>
+
+              <g transform="translate(1005 874)" filter="url(#shadow)">
+                <path d="M-78 35 V-25 L-38 -60 L2 -25 V35 Z" fill="#f0cf9a" stroke="#7e5b3e" stroke-width="6"/>
+                <path d="M-80 -25 L-38 -68 L5 -25" fill="#bc654e" stroke="#80433a" stroke-width="7"/>
+                <path d="M-2 35 V-25 L38 -60 L78 -25 V35 Z" fill="url(#ice)" stroke="#3478a8" stroke-width="6"/>
+                <path d="M-4 -25 L38 -68 L81 -25" fill="#dbfbff" stroke="#3478a8" stroke-width="7"/>
+                <rect x="-50" y="7" width="18" height="28" fill="#80553d"/>
+                <rect x="28" y="4" width="20" height="31" fill="#697985"/>
+              </g>
+
+              <g fill="#ffffff" opacity="0.9">
+                <circle cx="1025" cy="754" r="4"/>
+                <circle cx="1054" cy="774" r="3"/>
+                <circle cx="1084" cy="748" r="4"/>
+                <circle cx="1118" cy="780" r="3"/>
+                <circle cx="1040" cy="802" r="3"/>
+                <circle cx="1071" cy="817" r="4"/>
+                <circle cx="1106" cy="828" r="3"/>
+                <circle cx="1137" cy="757" r="3"/>
+                <circle cx="1012" cy="787" r="3"/>
+              </g>
+
+              <text x="900" y="952" class="small-label">Frost &amp; Sav's house</text>
+
+              <g transform="translate(850 875)" filter="url(#shadow)">
+                <path d="M-45 34 V-23 L0 -61 L45 -23 V34 Z" fill="#e6bd77" stroke="#765237" stroke-width="6"/>
+                <path d="M-53 -21 L0 -71 L53 -21" fill="#8d5947" stroke="#693a33" stroke-width="7"/>
+                <rect x="-10" y="6" width="20" height="28" fill="#7a5239"/>
+              </g>
+
+              <text x="770" y="950" class="small-label">Jacob &amp; Modern's house</text>
+
+              <path
+                d="M150 250 Q135 125 276 102 Q429 95 540 184
+                   Q655 250 602 398 Q571 500 424 516
+                   Q274 531 160 450 Q84 363 150 250 Z"
+                fill="url(#swamp)" stroke="#2d6753"
+                stroke-width="10" filter="url(#shadow)"
+              />
+
+              <text x="215" y="150" class="region-label">AZUL'S FAMILY SWAMP</text>
+
+              <path d="M167 341 Q235 290 315 332 Q388 357 445 407" fill="none" stroke="#224f5b" stroke-width="38"/>
+              <path d="M354 217 Q420 177 511 226 Q550 260 555 305" fill="none" stroke="#275664" stroke-width="30"/>
+
+              <g transform="translate(191 294)"><use href="#mangrove-tree"/></g>
+              <g transform="translate(287 234) scale(.92)"><use href="#mangrove-tree"/></g>
+              <g transform="translate(369 316) scale(.8)"><use href="#mangrove-tree"/></g>
+              <g transform="translate(444 219) scale(.85)"><use href="#mangrove-tree"/></g>
+              <g transform="translate(511 365) scale(.72)"><use href="#mangrove-tree"/></g>
+
+              <g transform="translate(260 372)" filter="url(#shadow)">
+                <path d="M-42 29 V-8 L0 -40 L42 -8 V29 Z" fill="#7f5e47" stroke="#4f3d34" stroke-width="6"/>
+                <path d="M-49 -7 L0 -48 L49 -7" fill="#a95f4d" stroke="#643b34" stroke-width="7"/>
+                <path d="M-44 29 H44" stroke="#378da8" stroke-width="18"/>
+              </g>
+
+              <text x="166" y="443" class="small-label">Azul's semi-submerged shack</text>
+
+              <path d="M430 235 Q530 148 644 220 Q714 278 658 370 Q563 435 452 376 Q390 312 430 235 Z" fill="#557d51" stroke="#2d6552" stroke-width="8"/>
+              <path d="M431 322 Q528 289 670 325" fill="none" stroke="#9a6a42" stroke-width="27" stroke-linecap="round"/>
+              <path d="M435 319 Q530 287 667 322" fill="none" stroke="#e2b174" stroke-width="7" stroke-linecap="round"/>
+              <rect x="484" y="260" width="100" height="48" rx="5" fill="#687577" stroke="#40525d" stroke-width="5"/>
+              <path d="M497 275 H520 M533 275 H556 M569 275 H575 M497 294 H520 M533 294 H556 M569 294 H575" stroke="#eaf5ee" stroke-width="4"/>
+
+              <g transform="translate(572 232)" filter="url(#shadow)">
+                <rect x="-55" y="-20" width="110" height="57" rx="5" fill="#e6c67d" stroke="#65533d" stroke-width="6"/>
+                <path d="M-62 -20 L-30 -48 H31 L62 -20" fill="#4b9764" stroke="#276244" stroke-width="7"/>
+                <rect x="-15" y="8" width="30" height="29" fill="#7bbbd2" stroke="#427b95" stroke-width="4"/>
+                <text x="-39" y="-3" font-size="14" font-weight="900" fill="#2a5d45">FROG ISLE</text>
+              </g>
+
+              <text x="503" y="415" class="small-label">Frog Isle boardwalk</text>
+
+              <g transform="translate(375 428)">
+                <ellipse rx="88" ry="58" fill="#567c50" stroke="#2f6550" stroke-width="8"/>
+                <ellipse rx="61" ry="36" fill="none" stroke="#cdb47c" stroke-width="11"/>
+                <ellipse cx="12" cy="4" rx="29" ry="17" fill="#2d7185" stroke="#9fdce6" stroke-width="4"/>
+                <path d="M-12 4 Q12 -13 36 4" fill="none" stroke="#8f613c" stroke-width="10"/>
+                <path d="M-58 20 H-33 M-55 20 V33 M-36 20 V33" stroke="#76523b" stroke-width="6"/>
+              </g>
+
+              <text x="281" y="514" class="small-label">Loop Park &amp; pond gardens</text>
+
+              <path
+                d="M675 172 Q794 81 920 166 Q996 229 968 328
+                   Q928 432 784 417 Q659 405 635 305 Q615 225 675 172 Z"
+                fill="#5b8352" stroke="#2f6752" stroke-width="9"
+              />
+
+              <g transform="translate(800 274)" filter="url(#shadow)">
+                <rect x="-128" y="-42" width="256" height="99" rx="9" fill="#e7d4a4" stroke="#755a40" stroke-width="7"/>
+                <path d="M-137 -41 L-94 -79 H91 L137 -41" fill="#c85c51" stroke="#7f3e37" stroke-width="8"/>
+                <rect x="-34" y="8" width="68" height="49" fill="#79bad5" stroke="#417a9b" stroke-width="5"/>
+                <rect x="-105" y="3" width="35" height="27" fill="#79bad5" stroke="#417a9b" stroke-width="4"/>
+                <rect x="69" y="3" width="35" height="27" fill="#79bad5" stroke="#417a9b" stroke-width="4"/>
+                <text x="-76" y="-14" font-size="25" font-weight="900" fill="#2e5648">FROG MALL</text>
+              </g>
+
+              <text x="715" y="452" class="small-label">Frog Mall shopping district</text>
+
+              <path
+                d="M1140 188 H1350 V132 H1482 V292 H1582 V553
+                   H1425 V652 H1185 V570 H1025 V412 H1140 Z"
+                fill="url(#snow)" stroke="#4e94bd"
+                stroke-width="12" filter="url(#shadow)"
+              />
+              <path
+                d="M1140 188 H1350 V132 H1482 V292 H1582 V553
+                   H1425 V652 H1185 V570 H1025 V412 H1140 Z"
+                fill="none" stroke="#ffffff" stroke-width="4" opacity="0.9"
+              />
+
+              <text x="1135" y="100" class="region-label">SNOW'S DOMAIN</text>
+
+              <path d="M1235 136 V233 H1173 V332 H1250 V428 H1184 V568" fill="none" stroke="#319bdd" stroke-width="58"/>
+              <path d="M1235 136 V233 H1173 V332 H1250 V428 H1184 V568" fill="none" stroke="#b7efff" stroke-width="12"/>
+
+              <g transform="translate(1209 385)">
+                <path d="M-91 0 H-43 M24 0 H75" fill="none" stroke="#7b563a" stroke-width="20" stroke-linecap="round"/>
+                <path d="M-90 -6 H-43 M24 -6 H74" fill="none" stroke="#e0ab67" stroke-width="6" stroke-linecap="round"/>
+              </g>
+
+              <g transform="translate(1087 251)"><use href="#snow-pine"/></g>
+              <g transform="translate(1128 306) scale(.74)"><use href="#snow-pine"/></g>
+              <g transform="translate(1380 258) scale(.85)"><use href="#snow-pine"/></g>
+              <g transform="translate(1495 478) scale(.91)"><use href="#snow-pine"/></g>
+              <g transform="translate(1081 505) scale(.72)"><use href="#snow-pine"/></g>
+              <g transform="translate(1315 186)"><use href="#ice-pillar"/></g>
+              <g transform="translate(1450 248) scale(1.1)"><use href="#ice-pillar"/></g>
+              <g transform="translate(1100 455) scale(.86)"><use href="#ice-pillar"/></g>
+
+              <g transform="translate(1445 376)" filter="url(#shadow)">
+                <path d="M-115 92 V-24 H115 V92 Z" fill="#8dcfe6" stroke="#386f9e" stroke-width="8"/>
+                <path d="M-108 7 H108" stroke="#ecffff" stroke-width="7"/>
+
+                <g fill="url(#ice)" stroke="#2f6fa4" stroke-width="6">
+                  <path d="M-139 91 V-20 Q-139 -45 -113 -45 Q-87 -45 -87 -20 V91 Z"/>
+                  <path d="M-82 91 V-13 Q-82 -38 -56 -38 Q-30 -38 -30 -13 V91 Z"/>
+                  <path d="M30 91 V-13 Q30 -38 56 -38 Q82 -38 82 -13 V91 Z"/>
+                  <path d="M87 91 V-20 Q87 -45 113 -45 Q139 -45 139 -20 V91 Z"/>
+                </g>
+
+                <path
+                  d="M-139 -19 Q-113 -47 -87 -19
+                     M-82 -12 Q-56 -40 -30 -12
+                     M30 -12 Q56 -40 82 -12
+                     M87 -19 Q113 -47 139 -19"
+                  fill="none" stroke="#efffff" stroke-width="7"
+                />
+
+                <path d="M-38 86 V-94 Q-38 -127 0 -127 Q38 -127 38 -94 V86 Z" fill="url(#ice)" stroke="#2f6fa4" stroke-width="7"/>
+                <path d="M-44 -86 L-28 -135 L-9 -111 L0 -157 L11 -111 L29 -135 L45 -86 Z" fill="url(#ice)" stroke="#2f6fa4" stroke-width="7" stroke-linejoin="round"/>
+                <path d="M-34 -88 L-20 -121 L-8 -105 L0 -142 L9 -105 L21 -121 L34 -88" fill="none" stroke="#efffff" stroke-width="6"/>
+                <path d="M-24 92 V32 Q-24 6 0 6 Q24 6 24 32 V92 Z" fill="#68737d" stroke="#3f4c58" stroke-width="5"/>
+
+                <g fill="#d9fbff" stroke="#3275a9" stroke-width="3">
+                  <rect x="-22" y="-54" width="12" height="17"/>
+                  <rect x="10" y="-54" width="12" height="17"/>
+                  <rect x="-124" y="20" width="11" height="16"/>
+                  <rect x="-68" y="25" width="11" height="16"/>
+                  <rect x="57" y="25" width="11" height="16"/>
+                  <rect x="113" y="20" width="11" height="16"/>
+                </g>
+
+                <path d="M0 -156 V-214 H54 L35 -194 L54 -175 H0" fill="#d9232e" stroke="#8f1720" stroke-width="4"/>
+              </g>
+
+              <g transform="translate(1134 622)" filter="url(#shadow)">
+                <path d="M-54 70 V-46 Q-54 -75 0 -75 Q54 -75 54 -46 V70 Z" fill="url(#ice)" stroke="#3a75a2" stroke-width="8"/>
+                <path d="M-56 -40 L-22 -76 L10 -45 L53 -20" fill="none" stroke="#4d7fa3" stroke-width="30" stroke-linecap="round"/>
+                <path d="M-51 -41 L-22 -73" fill="none" stroke="#efffff" stroke-width="8" stroke-linecap="round"/>
+                <path d="M-31 70 V21 Q-31 0 -1 0 Q30 0 30 21 V70 Z" fill="#6b737b" stroke="#3c4752" stroke-width="6"/>
+                <path d="M0 1 V70" stroke="#495560" stroke-width="4"/>
+              </g>
+
+              <g transform="translate(1093 302)" filter="url(#shadow)">
+                <path d="M-67 68 V-10 H67 V68 Z" fill="#9ad5e8" stroke="#3c77a5" stroke-width="7"/>
+                <path d="M-59 66 V-24 Q-59 -48 -38 -48 Q-17 -48 -17 -24 V66 Z" fill="url(#ice)" stroke="#3b76a4" stroke-width="6"/>
+                <path d="M17 66 V-24 Q17 -48 38 -48 Q59 -48 59 -24 V66 Z" fill="url(#ice)" stroke="#3b76a4" stroke-width="6"/>
+                <path d="M-56 15 L-15 -25 L31 -63" fill="none" stroke="#487fa8" stroke-width="31" stroke-linecap="round"/>
+                <path d="M-17 -25 L31 -63" fill="none" stroke="#efffff" stroke-width="9" stroke-linecap="round"/>
+                <path d="M-42 68 V26 H-17 M42 68 V26 H17" fill="none" stroke="#425a6b" stroke-width="7"/>
+              </g>
+
+              <g transform="translate(1450 575)">
+                <path d="M-90 11 Q-66 -47 0 -47 Q67 -47 90 11 Q66 58 0 51 Q-66 58 -90 11 Z" fill="#7fa7b5" stroke="#416f84" stroke-width="7"/>
+                <path d="M-65 -2 L-33 -29 M-39 28 L-10 -31 M7 32 L25 -31 M36 23 L61 -17" stroke="#70503a" stroke-width="8"/>
+                <path d="M-82 38 H82" stroke="#5b8ea0" stroke-width="6" stroke-dasharray="10 8"/>
+              </g>
+
+              <text x="1365" y="657" class="small-label">Salvaged castle ditch</text>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Battle of Frostbound" aria-pressed="false"
+                data-name="Snow's Third Castle"
+                data-text="Snow's third castle is the strong, current ice fortress at the center of Snow's Domain. The group is forced toward it by falling icicles, enters its trap-filled halls, confronts Snow and Modern, and faces the main Frostbound conflict here."
+                transform="translate(1445 170)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="First Fallen Castle" aria-pressed="false"
+                data-name="First Fallen Castle"
+                data-text="This broken one-cylinder castle is the entrance to the resistance base, making it more important than the ruin itself. After the fight at Snow's castle, the group shelters in the ruins here, where Frost carefully heals Ginger and discovers that their ice magic can heal instead of harm."
+                transform="translate(1134 526)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Second Fallen Castle" aria-pressed="false"
+                data-name="Second Fallen Castle"
+                data-text="Across the broken bridge stands another failed ice castle. Its missing doors and collapsed rear show the older pattern behind Snow's current fortress: immense control, repeated building, and repeated collapse."
+                transform="translate(1093 205)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Resistance Salvage Site" aria-pressed="false"
+                data-name="Resistance Salvage Site"
+                data-text="A castle once stood here, but the resistance stripped its remains for useful supplies. The ditch is evidence that Snow's old structures can be turned into resources for the people opposing her."
+                transform="translate(1450 509)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Emerald's Den" aria-pressed="false"
+                data-name="Emerald's Den"
+                data-text="Emerald lives here in the grasslands. Doug's doghouse sits nearby, and the bridge beside the home is the working crossing between Emerald's side of the map and the larger grassland routes."
+                transform="translate(472 704)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Doug's Doghouse" aria-pressed="false"
+                data-name="Doug's Home Area"
+                data-text="Doug's doghouse is beside Emerald's Den. It represents Doug's place with the group: loyal, alert, and always ready to follow the people he cares about into danger or into a quiet day outside."
+                transform="translate(360 775)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Azul's Shack" aria-pressed="false"
+                data-name="Azul's Semi-Submerged Shack"
+                data-text="Near the entrance to Azul's Family Swamp, Azul's half-flooded shack marks the route into the deeper marsh. The swamp is Azul's home region, with mangroves, boardwalks, water paths, Frog Isle, and the Frog Mall all connected through it."
+                transform="translate(260 287)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Frog Isle" aria-pressed="false"
+                data-name="Frog Isle"
+                data-text="Frog Isle is the swamp's boardwalk shopping community. It has parking, small businesses, Moss &amp; More, food spots including Frog-Donalds, and familiar locals such as Poppy and Bob. Azul brings Emerald here to share a place that feels like part of his everyday life."
+                transform="translate(572 157)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Loop Park" aria-pressed="false"
+                data-name="Loop Park &amp; Pond Gardens"
+                data-text="This swampy park has a loop trail, pond gardens, reeds, small wooden bridges, lily pads, and a bench. Near Frog Isle, Doug meets Tessa here: another dog who walks on two legs. They become friends after Doug shows her the pond gardens."
+                transform="translate(375 349)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Frog Mall" aria-pressed="false"
+                data-name="Frog Mall"
+                data-text="The Frog Mall is the larger indoor shopping destination near Frog Isle. It has clothing, treats, books, games, furniture, and other shops. It is where the group celebrates the success of Leap Bean Cafe with a shopping trip."
+                transform="translate(800 170)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Frost and Sav House" aria-pressed="false"
+                data-name="Frost &amp; Sav's House"
+                data-text="Frost and Sav live in this split regular-house and ice-house. Snow falls permanently above Frost's half, reflecting Frost's connection to ice magic. Sav and Frost are sisters: Sav is strategic and observant, while Frost is careful, compassionate, and still learning the reach of their healing magic."
+                transform="translate(1005 791)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+
+              <g
+                class="marker" tabindex="0" role="button"
+                aria-label="Jacob and Modern House" aria-pressed="false"
+                data-name="Jacob &amp; Modern's House"
+                data-text="Jacob and Modern live here beside Frost and Sav's home. Modern is rebuilding a life beyond Snow's castle, while Jacob is a steady presence who understands loss and takes the safety of his friends seriously."
+                transform="translate(850 792)"
+              >
+                <path class="pin-shape" d="M0 -31 C-17 -31 -29 -18 -29 -1 C-29 21 0 42 0 42 C0 42 29 21 29 -1 C29 -18 17 -31 0 -31 Z"/>
+                <circle cx="0" cy="-2" r="9" fill="#ffffff"/>
+              </g>
+            </g>
+          </svg>
+        </div>
       </div>
     </section>
   </main>
@@ -251,6 +878,126 @@
 
       window.addEventListener("pageshow", updateHeader);
       updateHeader();
+    })();
+
+    (() => {
+      const mapShell = document.getElementById("map-shell");
+      const world = document.getElementById("world");
+      const placeName = document.getElementById("place-name");
+      const placeText = document.getElementById("place-text");
+      const markers = [...document.querySelectorAll("#map .marker")];
+
+      let scale = 1;
+      let offsetX = 0;
+      let offsetY = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let activePointerId = null;
+
+      function renderMap() {
+        world.style.transform =
+          `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+      }
+
+      function changeZoom(amount) {
+        scale = Math.max(0.72, Math.min(3.1, scale + amount));
+        renderMap();
+      }
+
+      function resetMap() {
+        scale = 1;
+        offsetX = 0;
+        offsetY = 0;
+        renderMap();
+      }
+
+      function showLocation(marker) {
+        markers.forEach((item) => {
+          const selected = item === marker;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+
+        placeName.textContent = marker.dataset.name;
+        placeText.textContent = marker.dataset.text;
+      }
+
+      document.getElementById("zoom-in").addEventListener("click", () => {
+        changeZoom(0.2);
+      });
+
+      document.getElementById("zoom-out").addEventListener("click", () => {
+        changeZoom(-0.2);
+      });
+
+      document.getElementById("reset-map").addEventListener("click", resetMap);
+
+      markers.forEach((marker) => {
+        marker.addEventListener("click", (event) => {
+          event.stopPropagation();
+          showLocation(marker);
+        });
+
+        marker.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            showLocation(marker);
+          }
+        });
+      });
+
+      mapShell.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        changeZoom(event.deltaY < 0 ? 0.14 : -0.14);
+      }, { passive: false });
+
+      mapShell.addEventListener("pointerdown", (event) => {
+        if (
+          event.target.closest(".marker") ||
+          activePointerId !== null ||
+          event.button !== 0
+        ) {
+          return;
+        }
+
+        activePointerId = event.pointerId;
+        isDragging = true;
+        mapShell.classList.add("dragging");
+        mapShell.setPointerCapture(event.pointerId);
+        dragStartX = event.clientX - offsetX;
+        dragStartY = event.clientY - offsetY;
+      });
+
+      mapShell.addEventListener("pointermove", (event) => {
+        if (!isDragging || event.pointerId !== activePointerId) {
+          return;
+        }
+
+        offsetX = event.clientX - dragStartX;
+        offsetY = event.clientY - dragStartY;
+        renderMap();
+      });
+
+      function stopDragging(event) {
+        if (event.pointerId !== activePointerId) {
+          return;
+        }
+
+        isDragging = false;
+        activePointerId = null;
+        mapShell.classList.remove("dragging");
+
+        if (mapShell.hasPointerCapture(event.pointerId)) {
+          mapShell.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      mapShell.addEventListener("pointerup", stopDragging);
+      mapShell.addEventListener("pointercancel", stopDragging);
+      mapShell.addEventListener("lostpointercapture", stopDragging);
+
+      renderMap();
     })();
   </script>
 </body>
