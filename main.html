@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Frostbound Wiki</title>
+
+  <link rel="icon" type="image/png" sizes="512x512" href="Fav.png">
+  <link rel="apple-touch-icon" href="Fav.png">
+
   <style>
     :root {
       color-scheme: dark;
@@ -27,17 +31,78 @@
       line-height: 1.7;
     }
 
-    header {
-      padding: 56px 20px;
-      text-align: center;
-      background: linear-gradient(135deg, #173654, #102034);
-      border-bottom: 1px solid var(--border);
+    .header-space {
+      height: 208px;
     }
 
-    header h1 {
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 208px;
+      background: linear-gradient(135deg, #173654, #102034);
+      border-bottom: 1px solid var(--border);
+      transition: height 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .header-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px 200px;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      transition: width 0.25s ease, height 0.25s ease,
+                  left 0.25s ease;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+
+    .site-header h1 {
       margin: 0;
-      font-size: clamp(2rem, 6vw, 3.5rem);
       color: var(--accent);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.2;
+      text-align: center;
+      transition: font-size 0.25s ease;
+    }
+
+    .site-header.is-compact {
+      height: 72px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .site-header.is-compact .header-inner {
+      padding: 10px 80px;
+    }
+
+    .site-header.is-compact .header-logo {
+      left: 20px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .site-header.is-compact h1 {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
     }
 
     main {
@@ -48,6 +113,7 @@
 
     section {
       margin-top: 36px;
+      scroll-margin-top: 92px;
     }
 
     h2 {
@@ -106,9 +172,9 @@
       border-radius: 14px;
     }
 
-    .creator img {
-      margin-top: 20px;
+    .creator .photo-link {
       max-width: 670px;
+      margin-top: 20px;
     }
 
     .grid {
@@ -125,14 +191,28 @@
       text-align: center;
     }
 
-    .card img {
-      margin: 16px auto 0;
-      max-width: 185px;
-    }
-
     .card p {
       margin: 8px 0 0;
       color: var(--muted);
+    }
+
+    .photo-link {
+      display: block;
+      border-radius: 10px;
+    }
+
+    .card .photo-link {
+      max-width: 185px;
+      margin: 16px auto 0;
+    }
+
+    .photo-link img {
+      width: 100%;
+      transition: opacity 0.2s ease;
+    }
+
+    .photo-link:hover img {
+      opacity: 0.85;
     }
 
     .explore {
@@ -142,11 +222,66 @@
     .explore li {
       margin-bottom: 8px;
     }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 20px 16px 20px 156px;
+      }
+
+      .header-logo {
+        left: 16px;
+        width: 128px;
+        height: 128px;
+      }
+
+      .site-header h1 {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+      }
+
+      .site-header.is-compact .header-inner {
+        padding: 10px 16px 10px 76px;
+      }
+
+      .site-header.is-compact .header-logo {
+        left: 16px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .site-header.is-compact h1 {
+        font-size: clamp(1rem, 4.5vw, 1.4rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .header-logo,
+      .site-header h1,
+      .photo-link img {
+        transition: none;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>❄️ Frostbound Wiki</h1>
+  <div class="header-space" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+<a
+  class="header-logo"
+  href="https://cookey12563.github.io/Frostbound-Wiki/main.html"
+  aria-label="Frostbound Wiki home"
+>
+  <img
+    src="Logo.png"
+    alt="Frostbound Wiki logo"
+    width="2500"
+    height="2500"
+  >
+</a>
+      <h1>Frostbound Wiki</h1>
+    </div>
   </header>
 
   <main>
@@ -194,14 +329,17 @@
       <h2>Creator</h2>
       <div class="creator">
         <h3>⊂αηdγ(Kim) / Emerald12563</h3>
-        <a href="https://cdn.wizulus.com/smm2/maker/FS1-LYV-4VG/uploaded-courses">
-          View creator profile
-        </a>
-        <img
-          src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/1/1a/Creator_SMM2_Page.jpeg/revision/latest/scale-to-width-down/670?cb=20260403215808"
-          alt="Creator's Super Mario Maker 2 profile"
-          loading="lazy"
+        <a
+          class="photo-link"
+          href="https://cdn.wizulus.com/smm2/maker/FS1-LYV-4VG/uploaded-courses"
+          aria-label="View ⊂αηdγ(Kim) / Emerald12563's creator profile"
         >
+          <img
+            src="Creator_SMM2_Page.webp"
+            alt="Creator's Super Mario Maker 2 profile"
+            loading="lazy"
+          >
+        </a>
       </div>
     </section>
 
@@ -210,38 +348,47 @@
       <div class="grid">
         <article class="card">
           <h3>★GIJ Comix☆</h3>
-          <a href="https://cdn.wizulus.com/smm2/maker/N37-SP7-RJF/uploaded-courses">
-            View profile
-          </a>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/1/1f/GIJ.jpeg/revision/latest/scale-to-width-down/177?cb=20260711004854"
-            alt="★GIJ Comix☆"
-            loading="lazy"
+          <a
+            class="photo-link"
+            href="https://cdn.wizulus.com/smm2/maker/N37-SP7-RJF/uploaded-courses"
+            aria-label="View ★GIJ Comix☆'s profile"
           >
+            <img
+              src="GIJ.webp"
+              alt="★GIJ Comix☆"
+              loading="lazy"
+            >
+          </a>
         </article>
 
         <article class="card">
           <h3>★MudaΓn: ♭☆</h3>
-          <a href="https://cdn.wizulus.com/smm2/maker/P5M-1KV-TTF/uploaded-courses">
-            View profile
-          </a>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/3/3d/Cmodern.jpeg/revision/latest/scale-to-width-down/170?cb=20260711004926"
-            alt="★MudaΓn: ♭☆"
-            loading="lazy"
+          <a
+            class="photo-link"
+            href="https://cdn.wizulus.com/smm2/maker/P5M-1KV-TTF/uploaded-courses"
+            aria-label="View ★MudaΓn: ♭☆'s profile"
           >
+            <img
+              src="Cmodern.webp"
+              alt="★MudaΓn: ♭☆"
+              loading="lazy"
+            >
+          </a>
         </article>
 
         <article class="card">
           <h3>κε $βØτ</h3>
-          <a href="https://cdn.wizulus.com/smm2/maker/N52-HQ3-9RG/uploaded-courses">
-            View profile
-          </a>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/a/ae/Csav.jpeg/revision/latest/scale-to-width-down/177?cb=20260711004953"
-            alt="κε $βØτ"
-            loading="lazy"
+          <a
+            class="photo-link"
+            href="https://cdn.wizulus.com/smm2/maker/N52-HQ3-9RG/uploaded-courses"
+            aria-label="View κε $βØτ's profile"
           >
+            <img
+              src="Csav.webp"
+              alt="κε $βØτ"
+              loading="lazy"
+            >
+          </a>
         </article>
       </div>
     </section>
@@ -250,108 +397,92 @@
       <h2>Main Cast</h2>
       <div class="grid">
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Emerald">
-              Emerald
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/5/5a/Emerald.jpeg/revision/latest/scale-to-width-down/185?cb=20260403013513"
-            alt="Emerald"
-            loading="lazy"
+          <h3>Emerald</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Emerald.html"
+            aria-label="Read about Emerald"
           >
+            <img src="Emerald.webp" alt="Emerald" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Ginger">
-              Ginger
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/5/5e/Ginger.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034601"
-            alt="Ginger"
-            loading="lazy"
+          <h3>Ginger</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Ginger.html"
+            aria-label="Read about Ginger"
           >
+            <img src="Ginger.webp" alt="Ginger" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Doug">
-              Doug
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/4/49/Doug.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034705"
-            alt="Doug"
-            loading="lazy"
+          <h3>Doug</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Doug.html"
+            aria-label="Read about Doug"
           >
+            <img src="Doug.webp" alt="Doug" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Jacob">
-              Jacob
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/d/dd/Jacob.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034741"
-            alt="Jacob"
-            loading="lazy"
+          <h3>Jacob</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Jacob.html"
+            aria-label="Read about Jacob"
           >
+            <img src="Jacob.webp" alt="Jacob" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Frost">
-              Frost
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/7/76/Frost.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034823"
-            alt="Frost"
-            loading="lazy"
+          <h3>Frost</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Frost.html"
+            aria-label="Read about Frost"
           >
+            <img src="Frost.webp" alt="Frost" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Sav">
-              Sav
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/0/03/Sav.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034905"
-            alt="Sav"
-            loading="lazy"
+          <h3>Sav</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Sav.html"
+            aria-label="Read about Sav"
           >
+            <img src="Sav.webp" alt="Sav" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Azul">
-              Azul
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/3/35/Azul.jpeg/revision/latest/scale-to-width-down/185?cb=20260403035041"
-            alt="Azul"
-            loading="lazy"
+          <h3>Azul</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Azul.html"
+            aria-label="Read about Azul"
           >
+            <img src="Azul.webp" alt="Azul" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Modern">
-              Modern
-            </a>
-          </h3>
+          <h3>Modern</h3>
           <p>After Episode 4</p>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/2/2c/Modern.jpeg/revision/latest/scale-to-width-down/185?cb=20260403035007"
-            alt="Modern"
-            loading="lazy"
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Modern.html"
+            aria-label="Read about Modern"
           >
+            <img src="Modern.webp" alt="Modern" loading="lazy">
+          </a>
         </article>
       </div>
     </section>
@@ -360,30 +491,26 @@
       <h2>Villain Cast</h2>
       <div class="grid">
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Snow">
-              Snow
-            </a>
-          </h3>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/f/fc/Snow.jpeg/revision/latest/scale-to-width-down/185?cb=20260403034936"
-            alt="Snow"
-            loading="lazy"
+          <h3>Snow</h3>
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Snow.html"
+            aria-label="Read about Snow"
           >
+            <img src="Snow.webp" alt="Snow" loading="lazy">
+          </a>
         </article>
 
         <article class="card">
-          <h3>
-            <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Modern">
-              Modern
-            </a>
-          </h3>
+          <h3>Modern</h3>
           <p>Before Episode 4</p>
-          <img
-            src="https://static.wikia.nocookie.net/emerald12563-frostbound-smm2/images/2/2c/Modern.jpeg/revision/latest/scale-to-width-down/185?cb=20260403035007"
-            alt="Modern"
-            loading="lazy"
+          <a
+            class="photo-link"
+            href="https://cookey12563.github.io/Frostbound-Wiki/Modern.html"
+            aria-label="Read about Modern"
           >
+            <img src="Modern.webp" alt="Modern" loading="lazy">
+          </a>
         </article>
       </div>
     </section>
@@ -393,17 +520,39 @@
       <ul class="explore">
         <li>Episodes</li>
         <li>
-          <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Locations">
+          <a href="https://cookey12563.github.io/Frostbound-Wiki/Locations.html">
             Locations
           </a>
         </li>
         <li>
-          <a href="https://emerald12563-frostbound-smm2.fandom.com/wiki/Lore">
+          <a href="https://cookey12563.github.io/Frostbound-Wiki/Lore.html">
             Lore
           </a>
         </li>
       </ul>
     </section>
   </main>
+
+  <script>
+    (() => {
+      const header = document.getElementById("site-header");
+      let scheduled = false;
+
+      function updateHeader() {
+        header.classList.toggle("is-compact", window.scrollY > 136);
+        scheduled = false;
+      }
+
+      window.addEventListener("scroll", () => {
+        if (!scheduled) {
+          scheduled = true;
+          window.requestAnimationFrame(updateHeader);
+        }
+      }, { passive: true });
+
+      window.addEventListener("pageshow", updateHeader);
+      updateHeader();
+    })();
+  </script>
 </body>
 </html>
