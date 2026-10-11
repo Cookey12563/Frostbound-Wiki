@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lore | Frostbound Wiki</title>
+
+  <link rel="icon" type="image/png" sizes="512x512" href="Brand/Fav.png">
+  <link rel="apple-touch-icon" href="Brand/Fav.png">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0b1422;
+      --surface: #142338;
+      --border: #304963;
+      --text: #edf5ff;
+      --muted: #bacbdd;
+      --accent: #9cddff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .header-space {
+      height: 208px;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 208px;
+      background: linear-gradient(135deg, #173654, #102034);
+      border-bottom: 1px solid var(--border);
+      transition: height 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .header-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px 200px;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      transition: width 0.25s ease, height 0.25s ease,
+                  left 0.25s ease;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+
+    .site-header h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.2;
+      text-align: center;
+      transition: font-size 0.25s ease;
+    }
+
+    .site-header.is-compact {
+      height: 72px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .site-header.is-compact .header-inner {
+      padding: 10px 80px;
+    }
+
+    .site-header.is-compact .header-logo {
+      left: 20px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .site-header.is-compact h1 {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    section {
+      margin-top: 36px;
+      scroll-margin-top: 92px;
+    }
+
+    h2 {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .notice {
+      padding: 20px;
+      background: #19334b;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+    }
+
+    .notice p {
+      margin: 8px 0 0;
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 20px 16px 20px 156px;
+      }
+
+      .header-logo {
+        left: 16px;
+        width: 128px;
+        height: 128px;
+      }
+
+      .site-header h1 {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+      }
+
+      .site-header.is-compact .header-inner {
+        padding: 10px 16px 10px 76px;
+      }
+
+      .site-header.is-compact .header-logo {
+        left: 16px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .site-header.is-compact h1 {
+        font-size: clamp(1rem, 4.5vw, 1.4rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .header-logo,
+      .site-header h1 {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-space" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a
+        class="header-logo"
+        href="https://cookey12563.github.io/Frostbound-Wiki/main.html"
+        aria-label="Frostbound Wiki home"
+      >
+        <img
+          src="Brand/Logo.png"
+          alt="Frostbound Wiki logo"
+          width="2500"
+          height="2500"
+        >
+      </a>
+      <h1>Frostbound Wiki</h1>
+    </div>
+  </header>
+
+  <main>
+    <aside class="notice" aria-label="Wiki notice">
+      <strong>❄️ Frostbound Wiki Notice</strong>
+      <p>
+        This wiki is currently under construction. More Frostbound
+        information will be added soon, and some things may be subject
+        to change!
+      </p>
+    </aside>
+
+    <section>
+      <h2>Lore</h2>
+      <p>
+        FROSTBOUND takes place in a world where an unnatural winter has
+        begun to spread from the influence of a mysterious figure known
+        as Snow. As the frozen landscape expands, a towering ice castle
+        appears, becoming the center of the growing threat. The castle
+        is not a natural formation—it was deliberately created and serves
+        as the source of Snow's control over the surrounding area.
+      </p>
+      <p>
+        The story follows a group of friends led by Emerald as they
+        investigate the strange snowfall and eventually enter Snow's
+        domain. What first appears to be an abandoned frozen fortress
+        is revealed to be an active stronghold filled with traps, hidden
+        mechanisms, and deliberate attempts to separate and eliminate
+        intruders. The castle itself reflects Snow's will, with hazards
+        designed to force trespassers deeper into its halls.
+      </p>
+      <p>
+        One of the castle's caretakers is Modern, a young trapkeeper
+        responsible for maintaining many of the castle's mechanisms.
+        Although Modern initially remains loyal to Snow out of fear,
+        he gradually realizes that Snow's actions have gone far beyond
+        what he can accept. His decision to stand with Emerald and the
+        others becomes one of the story's first major turning points.
+      </p>
+      <p>
+        Snow possesses powerful ice magic capable of creating weapons,
+        manipulating the environment, and inflicting wounds that ordinary
+        treatment cannot fully heal. This magic is repeatedly used to
+        maintain control over the castle and to attack anyone who
+        opposes Snow's plans.
+      </p>
+      <p>
+        In contrast, Frost discovers a different application of ice
+        magic. Rather than harming others, Frost awakens the ability to
+        heal injuries and remove the lingering effects of Snow's
+        frost-burn. This discovery establishes a direct contrast between
+        Snow's destructive use of ice and Frost's restorative abilities.
+      </p>
+      <p>
+        As the group continues their journey, they encounter both physical
+        dangers and emotional challenges. Moments of sacrifice, trust,
+        and forgiveness become just as important as surviving the castle
+        itself. Characters repeatedly face choices that define who they
+        become, making personal decisions a central part of the story
+        alongside the conflict against Snow.
+      </p>
+      <p>
+        Throughout the series, themes of found family, trust, healing
+        versus control, and choice remain at the heart of the narrative.
+        Rather than focusing solely on defeating an enemy, FROSTBOUND
+        explores how compassion, loyalty, and the decisions people make
+        shape both themselves and the world around them.
+      </p>
+      <p>
+        Although the group's immediate goal is to stop Snow and survive
+        the frozen castle, the events of the story suggest that the
+        growing winter is only part of a much larger conflict still
+        unfolding.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const header = document.getElementById("site-header");
+      let scheduled = false;
+
+      function updateHeader() {
+        header.classList.toggle("is-compact", window.scrollY > 136);
+        scheduled = false;
+      }
+
+      window.addEventListener("scroll", () => {
+        if (!scheduled) {
+          scheduled = true;
+          window.requestAnimationFrame(updateHeader);
+        }
+      }, { passive: true });
+
+      window.addEventListener("pageshow", updateHeader);
+      updateHeader();
+    })();
+  </script>
+</body>
+</html>
