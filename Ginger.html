@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ginger | Frostbound Wiki</title>
+
+  <link rel="icon" type="image/png" sizes="512x512" href="Brand/Fav.png">
+  <link rel="apple-touch-icon" href="Brand/Fav.png">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --background: #0b1422;
+      --surface: #142338;
+      --border: #304963;
+      --text: #edf5ff;
+      --muted: #bacbdd;
+      --accent: #9cddff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .header-space {
+      height: 208px;
+    }
+
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 208px;
+      background: linear-gradient(135deg, #173654, #102034);
+      border-bottom: 1px solid var(--border);
+      transition: height 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .header-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 20px 200px;
+    }
+
+    .header-logo {
+      position: absolute;
+      top: 50%;
+      left: 20px;
+      transform: translateY(-50%);
+      display: block;
+      width: 160px;
+      height: 160px;
+      border-radius: 10px;
+      transition: width 0.25s ease, height 0.25s ease,
+                  left 0.25s ease;
+    }
+
+    .header-logo img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 0;
+    }
+
+    .site-header h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      line-height: 1.2;
+      text-align: center;
+      transition: font-size 0.25s ease;
+    }
+
+    .site-header.is-compact {
+      height: 72px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+    }
+
+    .site-header.is-compact .header-inner {
+      padding: 10px 80px;
+    }
+
+    .site-header.is-compact .header-logo {
+      left: 20px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .site-header.is-compact h1 {
+      font-size: clamp(1.2rem, 3vw, 1.7rem);
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+
+    section {
+      margin-top: 36px;
+      scroll-margin-top: 92px;
+    }
+
+    h2 {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    h3 {
+      margin: 24px 0 12px;
+      color: var(--accent);
+      line-height: 1.4;
+    }
+
+    p {
+      margin: 0 0 16px;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    [id] {
+      scroll-margin-top: 92px;
+    }
+
+    .notice {
+      padding: 20px;
+      background: #19334b;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 10px;
+    }
+
+    .notice p {
+      margin: 8px 0 0;
+    }
+
+    .intro-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 310px;
+      align-items: start;
+      gap: 28px;
+    }
+
+    .intro-text {
+      min-width: 0;
+    }
+
+    .character-info {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .character-info h3 {
+      margin: 0;
+      padding: 14px 16px;
+      background: #19334b;
+      text-align: center;
+    }
+
+    .character-preview {
+      margin: 0;
+      padding: 16px;
+    }
+
+    .character-preview img {
+      width: 100%;
+      height: 280px;
+      object-fit: contain;
+    }
+
+    .character-preview figcaption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .info-fields {
+      margin: 0;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 105px minmax(0, 1fr);
+      gap: 12px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      overflow-wrap: anywhere;
+    }
+
+    .info-row dt {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .info-row dd {
+      margin: 0;
+    }
+
+    .contents {
+      max-width: 420px;
+      margin-top: 24px;
+      padding: 18px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .contents h3 {
+      margin: 0 0 10px;
+    }
+
+    .contents ol {
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    .contents ol ol {
+      margin-top: 6px;
+    }
+
+    .category-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .category-tag {
+      padding: 4px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 760px) {
+      .intro-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .character-info {
+        width: 100%;
+        max-width: 420px;
+        justify-self: center;
+      }
+
+      .contents {
+        max-width: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .header-inner {
+        padding: 20px 16px 20px 156px;
+      }
+
+      .header-logo {
+        left: 16px;
+        width: 128px;
+        height: 128px;
+      }
+
+      .site-header h1 {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+      }
+
+      .site-header.is-compact .header-inner {
+        padding: 10px 16px 10px 76px;
+      }
+
+      .site-header.is-compact .header-logo {
+        left: 16px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .site-header.is-compact h1 {
+        font-size: clamp(1rem, 4.5vw, 1.4rem);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .site-header,
+      .header-logo,
+      .site-header h1 {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-space" aria-hidden="true"></div>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <a
+        class="header-logo"
+        href="https://cookey12563.github.io/Frostbound-Wiki/main.html"
+        aria-label="Frostbound Wiki home"
+      >
+        <img
+          src="Brand/Logo.png"
+          alt="Frostbound Wiki logo"
+          width="2500"
+          height="2500"
+        >
+      </a>
+      <h1>Frostbound Wiki</h1>
+    </div>
+  </header>
+
+  <main>
+    <aside class="notice" aria-label="Wiki notice">
+      <strong>❄️ Frostbound Wiki Notice</strong>
+      <p>
+        This wiki is currently under construction. More Frostbound
+        information will be added soon, and some things may be subject
+        to change!
+      </p>
+    </aside>
+
+    <section id="overview" aria-labelledby="character-heading">
+      <h2 id="character-heading">Ginger</h2>
+
+      <div class="intro-layout">
+        <div class="intro-text">
+          <p>
+            Ginger is a calm, practical, and quietly observant cat
+            in Emerald’s group. Remarkably composed under pressure,
+            he often knows exactly what needs to be said without
+            raising his voice.
+          </p>
+          <p>
+            His quiet confidence and thoughtful nature make him a
+            dependable member of the group. He supports his friends
+            through practical help, simple reassurance, and steady
+            company.
+          </p>
+
+          <nav class="contents" aria-labelledby="contents-heading">
+            <h3 id="contents-heading">Contents</h3>
+            <ol>
+              <li><a href="#appearance">Appearance</a></li>
+              <li><a href="#personality">Personality</a></li>
+              <li><a href="#story">Story role</a></li>
+              <li><a href="#skills">Skills and abilities</a></li>
+              <li>
+                <a href="#relationships">Relationships</a>
+                <ol>
+                  <li><a href="#emerald">Emerald</a></li>
+                  <li><a href="#azul">Azul</a></li>
+                  <li><a href="#frost">Frost</a></li>
+                  <li><a href="#doug">Doug</a></li>
+                  <li><a href="#friends">Jacob, Sav, and Modern</a></li>
+                </ol>
+              </li>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#interests">Interests</a></li>
+              <li><a href="#theme">Character theme</a></li>
+              <li><a href="#first-appearance">First appearance</a></li>
+            </ol>
+          </nav>
+        </div>
+
+        <aside class="character-info" aria-labelledby="info-heading">
+          <h3 id="info-heading">Ginger</h3>
+
+          <figure class="character-preview">
+            <img
+              src="main-page/Ginger.webp"
+              alt="Ginger in Super Mario Maker 2"
+            >
+            <figcaption>Super Mario Maker 2 version</figcaption>
+          </figure>
+
+          <dl class="info-fields">
+            <div class="info-row">
+              <dt>Name</dt>
+              <dd>Ginger</dd>
+            </div>
+            <div class="info-row">
+              <dt>Series</dt>
+              <dd>Frostbound</dd>
+            </div>
+            <div class="info-row">
+              <dt>Species</dt>
+              <dd>Cat</dd>
+            </div>
+            <div class="info-row">
+              <dt>Pronouns</dt>
+              <dd>He/him</dd>
+            </div>
+            <div class="info-row">
+              <dt>Role</dt>
+              <dd>Member of Emerald’s group</dd>
+            </div>
+            <div class="info-row">
+              <dt>Residence</dt>
+              <dd>
+                A protected pocket-space home connected to the
+                old Resistance base
+              </dd>
+            </div>
+            <div class="info-row">
+              <dt>First appearance</dt>
+              <dd>Episode 1</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <section id="appearance">
+      <h2>Appearance</h2>
+      <p>Ginger is a cat with a calm, composed demeanor.</p>
+    </section>
+
+    <section id="personality">
+      <h2>Personality</h2>
+      <p>
+        Ginger is steady, thoughtful, practical, and understated.
+        He approaches problems without unnecessary panic and
+        remains composed even in dangerous situations.
+      </p>
+      <p>
+        He almost never raises his voice and rarely lets his
+        emotions take over. His dry humor contrasts with Azul’s
+        dramatic reactions, while his practical judgment makes
+        him a reassuring presence.
+      </p>
+      <p>
+        Ginger’s calmness does not mean that he feels no fear.
+        He prefers not to give frightening things more attention
+        than they deserve, supporting his friends through simple
+        reassurance and practical help.
+      </p>
+    </section>
+
+    <section id="story">
+      <h2>Story role</h2>
+      <p>
+        Ginger accompanies the group during the conflict with Snow.
+        After the fight at Snow’s castle, Frost heals him in the
+        ruins of the First Fallen Castle.
+      </p>
+      <p>
+        This becomes an important moment in Frost’s discovery
+        that their ice magic can heal rather than only harm.
+      </p>
+      <p>
+        In later material, Ginger shows Emerald his home and
+        explains how he transformed part of the old Resistance
+        base into a peaceful living space.
+      </p>
+    </section>
+
+    <section id="skills">
+      <h2>Skills and abilities</h2>
+      <ul>
+        <li>
+          <strong>Self-control:</strong>
+          Ginger remains remarkably composed under pressure.
+        </li>
+        <li>
+          <strong>Observation:</strong>
+          He is quietly attentive and often knows what needs
+          to be said.
+        </li>
+        <li>
+          <strong>Practical judgment:</strong>
+          He approaches problems thoughtfully and offers
+          useful help without unnecessary panic.
+        </li>
+        <li>
+          <strong>Emotional steadiness:</strong>
+          His reassurance and dependable company support
+          his friends during difficult situations.
+        </li>
+        <li>
+          <strong>Doorway to his home:</strong>
+          Later material depicts Ginger opening a doorway
+          from the Grasslands to his protected home.
+        </li>
+      </ul>
+      <p>
+        The full nature and limits of Ginger’s doorway ability
+        are not clearly explained.
+      </p>
+    </section>
+
+    <section id="relationships">
+      <h2>Relationships</h2>
+
+      <h3 id="emerald">Emerald</h3>
+      <p>
+        Emerald is a trusted friend. Ginger later shows her his
+        home and explains how he transformed part of the old
+        Resistance base into a peaceful living space.
+      </p>
+
+      <h3 id="azul">Azul</h3>
+      <p>
+        Their friendship pairs Ginger’s dry humor with Azul’s
+        expressive personality. Ginger reassures Azul and
+        helps him manage fear more calmly.
+      </p>
+
+      <h3 id="frost">Frost</h3>
+      <p>
+        Frost is a companion whose healing magic helps Ginger
+        after the battle at Snow’s castle. Healing him becomes
+        an important part of Frost’s discovery of their
+        restorative abilities.
+      </p>
+
+      <h3 id="doug">Doug</h3>
+      <p>
+        Ginger creates a small doorway connecting his home to
+        Doug’s doghouse, allowing Doug to visit and check on him.
+      </p>
+
+      <h3 id="friends">Jacob, Sav, and Modern</h3>
+      <p>
+        Jacob, Sav, and Modern are fellow members of the group.
+        Ginger offers practical care and reassurance when
+        Jacob is sick.
+      </p>
+    </section>
+
+    <section id="home">
+      <h2>Home</h2>
+      <p>
+        Ginger’s home preserves part of the old Resistance base
+        inside a safer pocket-like space. He can open a doorway
+        to it from the Grasslands.
+      </p>
+      <p>
+        Inside are wooden floors, old stone walls, books, warm
+        lamps, comfortable chairs, a kitchen, and many plants.
+        A small doorway also connects the home to Doug’s doghouse.
+      </p>
+      <p>
+        Ginger changes the base from a place associated with
+        emergencies into somewhere people can feel safe and
+        at home.
+      </p>
+    </section>
+
+    <section id="interests">
+      <h2>Interests</h2>
+      <ul>
+        <li>Plants</li>
+        <li>Books</li>
+        <li>Tea</li>
+        <li>Comfortable surroundings</li>
+        <li>Quiet time with friends</li>
+      </ul>
+    </section>
+
+    <section id="theme">
+      <h2>Character theme</h2>
+      <p>
+        Ginger’s character theme is quiet care. He shows that
+        helping others does not always require a speech or
+        dramatic action; sometimes it means offering food,
+        reassurance, a safe place, or steady company.
+      </p>
+    </section>
+
+    <section id="first-appearance">
+      <h2>First appearance</h2>
+      <p>Ginger first appears in Episode 1.</p>
+    </section>
+
+    <div class="category-tags" aria-label="Character categories">
+      <span class="category-tag">Characters</span>
+      <span class="category-tag">Cats</span>
+      <span class="category-tag">Frostbound</span>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const header = document.getElementById("site-header");
+      let scheduled = false;
+
+      function updateHeader() {
+        header.classList.toggle("is-compact", window.scrollY > 136);
+        scheduled = false;
+      }
+
+      window.addEventListener("scroll", () => {
+        if (!scheduled) {
+          scheduled = true;
+          window.requestAnimationFrame(updateHeader);
+        }
+      }, { passive: true });
+
+      window.addEventListener("pageshow", updateHeader);
+      updateHeader();
+    })();
+  </script>
+</body>
+</html>
